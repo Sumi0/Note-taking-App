@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        *{
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .note-existing {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            border: 0.5px solid black;
+            padding: 5px;
+            border-radius: 5px;
+            width: 500px;   
+        }
+        .note-header {
+            padding: 10px;
+            font-size: 22px;
+            font-family: "Google Sans",Arial,sans-serif;
+            font-size: 1.375rem;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 1.75rem;
+        }
+        .note-body {
+            padding: 5px 10px 5px;
+            letter-spacing: .00625em;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5rem;
+        }
+        .note-last-updated {
+            margin-left: auto;
+            padding: 0 10px 0;
+            font-size: 0.75rem;
+            font-weight: 400; 
+        }
+        .note-buttons{
+            display:flex;
+            flex-direction: row;
+            padding: 5px 10px 0;
+
+        }    
+        button {
+            padding: 5px 15px;
+        }
+        button.close {
+            margin-left: auto; 
+            border: 2px solid transparent;
+            border-radius: 5px;  
+            background-color: white;
+        }
+        button.close:hover {
+            background-color: revert;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+    <div class="note-existing">
+        <div class="note-header">Heading</div>
+        <div class="note-body">
+            Hey guys 👋. Looking forward to solidify my fundamentals of web3 and then build some amazing product in DAO, NFT space.
+            I come from an Engineering background and have worked as a Software Engineer and Product Owner .
+            I aspire to learn from all members here !
+        </div>
+        <div class="note-last-updated">Edited 27:29m</div>
+        <div class="note-buttons">
+            <div>
+                <span class="material-icons" style="margin-right: 20px;">content_copy</span>
+                <span class="material-icons">format_bold</span>
+                <span class="material-icons">format_italic</span>
+                <span class="material-icons">format_underlined</span>
+                <span class="material-icons" style="margin-left: 5px;">delete</span> 
+            </div>
+            <button class="close">Close</button>
+        </div>
+    </div>
+    <script src="note-creation.js" type=module></script>
+
+</body>
+
+</html>

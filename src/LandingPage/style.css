@@ -21,9 +21,8 @@ body {
 }
 
 .create-note {
-  height: 30vh;
+  /* height: 30vh; */
   display: flex;
-
   /* background: transparent; */
   margin-top: 80px;
   align-items: flex-start;
