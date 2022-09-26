@@ -106,49 +106,39 @@ class NoteModal extends HTMLElement {
     this.shadowRoot.querySelector(".note-buttons #make-italics").addEventListener("click", this.makeItalics.bind(this));
     this.shadowRoot.querySelector(".note-buttons #make-underlined").addEventListener("click", this.makeUnderlined.bind(this));
     console.log('connected!', this, window.getSelection().toString());
-    // this.header = this.getAttribute("header");
-    // this.body = this.getAttribute("body");
-    // this.render();
-
   }
 
   makeCopy() {
     let copyNoteHeader = this.shadowRoot.querySelector(".note-header");
     let copyNoteBody = this.shadowRoot.querySelector(".note-body");
     let copyText = `${copyNoteHeader.textContent}` + `\n` + `${copyNoteBody.textContent}`;
-    // copyNoteBody.select();
-    // copyNoteBody.setSelectionRange(0, 99999);
-    // let selectedText = window.getSelection().toString();
     navigator.clipboard.writeText(copyText);
   }
   
   makeBold() { 
-
     let selection = this.shadowRoot.querySelector(".note-body");
-    selection.focus(); // make it the active element so the command is applied to it
-    this.parentNode.parentNode.parentNode.execCommand('bold', false, null);
-    // if (selection.style.fontWeight == "bolder") {
-    //   selection.style.fontWeight = "normal";
-    // } else {
-    //   selection.style.fontWeight = "bolder";
-    // }
-    console.log(this.parentNode.parentNode.parentNode, window.getSelection());
+    if (selection.style.fontWeight == "bolder") {
+      selection.style.fontWeight = "normal";
+    } else {
+      selection.style.fontWeight = "bolder";
+    }
 
-    // const userSelection = window.getSelection();
-    // const selectedTextRange = userSelection.getRangeAt(0);
-    // selectedTextRange.surroundContents(strongElement);
   }
   makeItalics() {
-    let text = this.shadowRoot.querySelector(".note-body").innerText;
-    let selection = globalThis.getSelection().toString();
-    let italicText = `<em>${selection}</em>`;
-    this.shadowRoot.querySelector(".note-body").innerText = text.replace(selection, italicText);
+    let selection = this.shadowRoot.querySelector(".note-body");
+    if (selection.style.fontStyle == "italic") {
+      selection.style.fontStyle = "normal";
+    } else {
+      selection.style.fontStyle = "italic";
+    }
   }
   makeUnderlined() {
-    let text = this.shadowRoot.querySelector(".note-body").innerText;
-    let selection = globalThis.getSelection();
-    let underlineText = "<u>" + selection + "</u>";
-    this.shadowRoot.querySelector(".note-body").innerText = text.replace(selection, underlineText);
+    let selection = this.shadowRoot.querySelector(".note-body"); 
+    if (selection.style.textDecoration = "underline") {
+      selection.style.textDecoration = "none";
+    } else {
+      selection.style.textDecoration = "underline";
+    }
   }
 
   render() {
