@@ -8,7 +8,7 @@ template.innerHTML =
           font-family: Arial, Helvetica, sans-serif;
       }
       .note-existing {
-          background-color: white;
+          background-color: mintcream;
           display: flex;
           flex-direction: column;
           border: 0.5px solid black;
@@ -58,13 +58,14 @@ template.innerHTML =
       }    
       button {
           padding: 5px 20px;
+          cursor: pointer;
       }
       button.close {
           margin-left: auto; 
           border: 2px solid transparent;
           border-radius: 5px;  
-          background-color: white;
           font-size: 14px;
+          background-color: inherit;
       }
       button.close:hover {
           background-color: revert;
@@ -73,7 +74,7 @@ template.innerHTML =
   
   <div class="note-existing">
     <div class="note-header" data-placeholder="Title" contentEditable></div>
-    <div class="note-body" data-placeholder="Enter the note here .." contentEditable> </div>
+    <div class="note-body" autofocus data-placeholder="Enter the note here .." contentEditable> </div>
     <div class="note-last-updated"> Edited 27:29m </div>
     <div class="note-buttons">
       <div style="display: flex; align-items: center;">
@@ -83,11 +84,13 @@ template.innerHTML =
         <span class = "material-icons" id = "make-underlined"> format_underlined </span>
         <span class="material-icons" style="margin-left: 5px;">delete</span> 
       </div>
-      <button class="close">Close</button>
+      <button type="button" class="close">Close</button>
     </div>
 </div>
 
 `;
+
+
 
 class NoteModal extends HTMLElement {
   constructor() {
@@ -98,6 +101,7 @@ class NoteModal extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot.querySelector('.note-header').textContent = this.getAttribute('header');
     this.shadowRoot.querySelector('.note-body').textContent = this.getAttribute('body');
+    this.selectedText = this.targetSelection = null;
   }
   
   connectedCallback() {
@@ -105,24 +109,34 @@ class NoteModal extends HTMLElement {
     this.shadowRoot.querySelector(".note-buttons #make-bold").addEventListener("click", this.makeBold.bind(this));
     this.shadowRoot.querySelector(".note-buttons #make-italics").addEventListener("click", this.makeItalics.bind(this));
     this.shadowRoot.querySelector(".note-buttons #make-underlined").addEventListener("click", this.makeUnderlined.bind(this));
-    console.log('connected!', this, window.getSelection().toString());
+    this.shadowRoot.querySelector(".note-body").addEventListener("click", () => {
+      this.targetSelection = window.getSelection();
+      this.selectedText = this.targetSelection.toString();
+    });
+    console.log('connected!', this);
   }
 
   makeCopy() {
-    let copyNoteHeader = this.shadowRoot.querySelector(".note-header");
-    let copyNoteBody = this.shadowRoot.querySelector(".note-body");
-    let copyText = `${copyNoteHeader.textContent}` + `\n` + `${copyNoteBody.textContent}`;
-    navigator.clipboard.writeText(copyText);
+    if (this.selectedText !== '') {
+      navigator.clipboard.writeText(this.selectedText);
+    } else {      
+      let copyNoteHeader = this.shadowRoot.querySelector(".note-header").textContent;
+      let copyNoteBody = this.shadowRoot.querySelector(".note-body").textContent;
+      let copyText = `${copyNoteHeader}` + `\n` + `${copyNoteBody}`;
+      copyText = !copyNoteHeader ? copyNoteBody : copyText;                             
+      navigator.clipboard.writeText(copyText);
+    }
   }
   
   makeBold() { 
-    let selection = this.shadowRoot.querySelector(".note-body");
-    if (selection.style.fontWeight == "bolder") {
-      selection.style.fontWeight = "normal";
-    } else {
-      selection.style.fontWeight = "bolder";
-    }
+    let selection = this.shadowRoot.querySelector(".note-body").textContent;
+    let text_made_bold = `<br>` + this.selectedText + `</br>`;
+    this.shadowRoot.querySelector(".note-body").innerText = selection.replace(this.selectedText, text_made_bold)
 
+    // const userSelection = window.getSelection();
+    // const selectedTextRange = userSelection.getRangeAt(0);
+    // console.log(userSelection.toString(), selectedTextRange); 
+    // selectedTextRange.surroundContents(strongElement);
   }
   makeItalics() {
     let selection = this.shadowRoot.querySelector(".note-body");
@@ -133,17 +147,15 @@ class NoteModal extends HTMLElement {
     }
   }
   makeUnderlined() {
-    let selection = this.shadowRoot.querySelector(".note-body"); 
-    if (selection.style.textDecoration = "underline") {
+    let selection = this.shadowRoot.querySelector(".note-body");
+    if (selection.style.textDecoration == "underline") {
       selection.style.textDecoration = "none";
     } else {
       selection.style.textDecoration = "underline";
     }
   }
 
-  render() {
-    this.header;
-    this.body;
-  }
 }
 window.customElements.define('note-modal', NoteModal);
+
+
