@@ -106,9 +106,9 @@ class NoteModal extends HTMLElement {
   
   connectedCallback() {
     this.shadowRoot.querySelector(".note-buttons #make-copy").addEventListener("click", this.makeCopy.bind(this));
-    this.shadowRoot.querySelector(".note-buttons #make-bold").addEventListener("click", this.makeBold.bind(this));
-    this.shadowRoot.querySelector(".note-buttons #make-italics").addEventListener("click", this.makeItalics.bind(this));
-    this.shadowRoot.querySelector(".note-buttons #make-underlined").addEventListener("click", this.makeUnderlined.bind(this));
+    this.shadowRoot.querySelector(".note-buttons #make-bold").addEventListener("click", this.applyFormat.bind(this, "strong"));
+    this.shadowRoot.querySelector(".note-buttons #make-italics").addEventListener("click", this.applyFormat.bind(this, "em"));
+    this.shadowRoot.querySelector(".note-buttons #make-underlined").addEventListener("click", this.applyFormat.bind(this, "u"));
     this.shadowRoot.querySelector(".note-body").addEventListener("click", () => {
       this.targetSelection = window.getSelection();
       this.selectedText = this.targetSelection.toString();
@@ -128,31 +128,10 @@ class NoteModal extends HTMLElement {
     }
   }
   
-  makeBold() { 
-    let selection = this.shadowRoot.querySelector(".note-body").textContent;
-    let text_made_bold = `<br>` + this.selectedText + `</br>`;
-    this.shadowRoot.querySelector(".note-body").innerText = selection.replace(this.selectedText, text_made_bold)
-
-    // const userSelection = window.getSelection();
-    // const selectedTextRange = userSelection.getRangeAt(0);
-    // console.log(userSelection.toString(), selectedTextRange); 
-    // selectedTextRange.surroundContents(strongElement);
-  }
-  makeItalics() {
-    let selection = this.shadowRoot.querySelector(".note-body");
-    if (selection.style.fontStyle == "italic") {
-      selection.style.fontStyle = "normal";
-    } else {
-      selection.style.fontStyle = "italic";
-    }
-  }
-  makeUnderlined() {
-    let selection = this.shadowRoot.querySelector(".note-body");
-    if (selection.style.textDecoration == "underline") {
-      selection.style.textDecoration = "none";
-    } else {
-      selection.style.textDecoration = "underline";
-    }
+  applyFormat(format) { 
+    let selection = this.shadowRoot.querySelector(".note-body").textContent; 
+    let text_formatted = `<${format}>` + this.selectedText + `</${format}>`;
+    this.shadowRoot.querySelector(".note-body").innerHTML = selection.replace(this.selectedText, text_formatted)
   }
 
 }
